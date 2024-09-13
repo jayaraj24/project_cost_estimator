@@ -5,7 +5,8 @@ from bs4 import BeautifulSoup
 url = 'https://baofengtech.com/shop/'
 
 # Fetch the HTML content of the page
-response = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36"})
+response = requests.get(url, headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36"})
 if response.status_code == 200:
     print("Successfully fetched the webpage.")
 else:
@@ -17,18 +18,22 @@ soup = BeautifulSoup(response.text, 'html.parser')
 
 # Find all product elements
 products = soup.find_all('div', class_="archive-products")
-print(products)
+
 # Iterate through each product and extract details
 for product in products:
     # Extract the product link
-    link_tag = product.find_all('li',class_="product-col")
-    print('Link_tag------------------------------------------------------------------------------',link_tag)
+    link_tag = product.find('div', class_='product-inner')
+    print(link_tag)
     if link_tag:
+        link = link_tag.find('div', class_='product-inner')
+        print(
+            '------------------------------------------------------------------------------')
+        print(link)
         link = link_tag.get('href')
     else:
         print("Product link not found.")
         link = "N/A"
-    
+
     # Extract the product price
     price_tag = product.find('span', class_='woocommerce-Price-currencySymbol')
     if price_tag:
